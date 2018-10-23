@@ -90,4 +90,74 @@ public class ComparatorTest
 
         Assert.assertArrayEquals(expected, actual);
     }
+
+    @Test
+    public void testThenComparingUsingComparable()
+    {
+        abstract class Student
+        {
+            abstract String name();
+            abstract int score();
+        }
+
+        final Student student1 = new Student()
+        {
+            @Override
+            String name() {
+                return "baa";
+            }
+
+            @Override
+            int score() {
+                return 20;
+            }
+        };
+
+        final Student student2 = new Student()
+        {
+            @Override
+            String name() {
+                return "aaa";
+            }
+
+            @Override
+            int score() {
+                return 19;
+            }
+        };
+
+        final Student student3 = new Student()
+        {
+            @Override
+            String name() {
+                return "zaa";
+            }
+
+            @Override
+            int score() {
+                return 20;
+            }
+        };
+
+        final Student[] students = new Student[]
+                {
+                        student1,
+                        student2,
+                        student3
+                };
+
+        final Comparator<Student> byScoreAscending = (leftStudent, rightStudent) -> Integer.compare(leftStudent.score(), rightStudent.score());
+
+        Arrays.sort(students, byScoreAscending.reversed().thenComparing(Student::name)::compare);
+
+        final Student[] actual = students;
+
+        final Student[] expected = {
+                student1,
+                student3,
+                student2
+        };
+
+        Assert.assertArrayEquals(expected, actual);
+    }
 }
