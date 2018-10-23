@@ -12,8 +12,9 @@ public interface Comparator<T> {
 
     default Comparator<T> thenComparing(Comparator<? super T> other) {
         requireNonNull(other);
-        return (left, right) -> (
-                (compare(left, right) != 0) ? compare(left, right) : other.compare(left, right)
-        );
+        return (left, right) -> {
+            int result = compare(left, right);
+            return (result != 0) ? result : other.compare(left, right);
+        };
     }
 }
